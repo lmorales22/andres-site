@@ -228,6 +228,58 @@ let currentAlt = '';
 let currentIndex = 0;
 let transitioning = false;
 let exitTimerId = null;
+let transitionToken = 0;
+const preloadCache = new Set();
+const preloadPromises = new Map();
+
+const preloadImage = (src) => {
+  if (!src) return Promise.resolve();
+  if (preloadPromises.has(src)) return preloadPromises.get(src);
+
+  const promise = new Promise((resolve) => {
+    const img = new Image();
+    let settled = false;
+
+    const done = () => {
+      if (settled) return;
+      settled = true;
+      preloadCache.add(src);
+      resolve();
+    };
+
+    img.decoding = 'async';
+    img.onload = done;
+    img.onerror = done;
+    img.src = src;
+
+    if (img.complete) done();
+  });
+
+  preloadPromises.set(src, promise);
+  return promise;
+};
+
+const preloadGallery = (images, limit = images.length) => {
+  images.slice(0, limit).forEach((src) => {
+    void preloadImage(src);
+  });
+};
+
+const parseGallery = (card) => {
+  let parsedGallery = [];
+  try {
+    parsedGallery = JSON.parse(card.dataset.gallery || '[]');
+  } catch (_) {
+    parsedGallery = [];
+  }
+
+  if (!Array.isArray(parsedGallery) || parsedGallery.length === 0) {
+    const fallbackSrc = card.querySelector('.project-img')?.getAttribute('src');
+    parsedGallery = fallbackSrc ? [fallbackSrc] : [];
+  }
+
+  return parsedGallery;
+};
 
 const updateCounter = () => {
   if (currentGallery.length <= 1) {
@@ -250,8 +302,7 @@ const renderLightbox = (index, direction) => {
   if (!currentGallery.length) return;
 
   const nextSrc = currentGallery[index];
-  const activeImage = getActiveImage();
-  const inactiveImage = activeImage === lightboxImgA ? lightboxImgB : lightboxImgA;
+  const currentToken = ++transitionToken;
 
   if (exitTimerId) {
     clearTimeout(exitTimerId);
@@ -283,44 +334,42 @@ const renderLightbox = (index, direction) => {
 
   if (transitioning) return;
   transitioning = true;
+  void preloadImage(nextSrc).then(() => {
+    if (currentToken !== transitionToken || !lightbox.classList.contains('open')) {
+      transitioning = false;
+      return;
+    }
 
-  activeImage.classList.remove('active');
-  activeImage.classList.add('exit');
+    const activeImage = getActiveImage();
+    const inactiveImage = activeImage === lightboxImgA ? lightboxImgB : lightboxImgA;
 
-  inactiveImage.classList.remove('exit', 'active');
-  inactiveImage.src = nextSrc;
-  inactiveImage.alt = currentAlt;
+    activeImage.classList.remove('active');
+    activeImage.classList.add('exit');
 
-  requestAnimationFrame(() => {
-    inactiveImage.classList.add('active');
-    updateCounter();
+    inactiveImage.classList.remove('exit', 'active');
+    inactiveImage.src = nextSrc;
+    inactiveImage.alt = currentAlt;
+
+    requestAnimationFrame(() => {
+      inactiveImage.classList.add('active');
+      updateCounter();
+    });
+
+    exitTimerId = window.setTimeout(() => {
+      activeImage.classList.remove('exit');
+      activeImage.src = '';
+      activeImage.alt = '';
+      transitioning = false;
+      exitTimerId = null;
+    }, 520);
   });
-
-  exitTimerId = window.setTimeout(() => {
-    activeImage.classList.remove('exit');
-    activeImage.src = '';
-    activeImage.alt = '';
-    transitioning = false;
-    exitTimerId = null;
-  }, 520);
 };
 
 const openLightbox = (card) => {
-  let parsedGallery = [];
-  try {
-    parsedGallery = JSON.parse(card.dataset.gallery || '[]');
-  } catch (_) {
-    parsedGallery = [];
-  }
-
-  if (!Array.isArray(parsedGallery) || parsedGallery.length === 0) {
-    const fallbackSrc = card.querySelector('.project-img')?.getAttribute('src');
-    parsedGallery = fallbackSrc ? [fallbackSrc] : [];
-  }
-
-  currentGallery = parsedGallery;
+  currentGallery = parseGallery(card);
   currentAlt = card.querySelector('.project-img')?.getAttribute('alt') || 'Project image';
   currentIndex = 0;
+  preloadGallery(currentGallery);
   renderLightbox(currentIndex, 'initial');
 
   lightbox.classList.add('open');
@@ -329,6 +378,7 @@ const openLightbox = (card) => {
 };
 
 const closeLightbox = () => {
+  transitionToken += 1;
   if (exitTimerId) {
     clearTimeout(exitTimerId);
     exitTimerId = null;
@@ -395,21 +445,14 @@ window.addEventListener('keydown', (event) => {
   }
 });
 
-const preloadCache = new Set();
-
-const preloadGallery = (images) => {
-  images.slice(0, 4).forEach((src) => {
-    if (preloadCache.has(src)) return;
-    preloadCache.add(src);
-    const img = new Image();
-    img.src = src;
-  });
-};
-
 cards.forEach((item) => {
-  item.addEventListener('mouseenter', () => {
-    preloadGallery(JSON.parse(item.dataset.gallery));
-  });
+  const primeGallery = () => {
+    preloadGallery(parseGallery(item), 8);
+  };
+
+  item.addEventListener('mouseenter', primeGallery);
+  item.addEventListener('focusin', primeGallery);
+  item.addEventListener('touchstart', primeGallery, { passive: true });
 });
 
 onScroll();
