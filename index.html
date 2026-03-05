@@ -31,6 +31,7 @@
         </button>
         <ul class="nav-links">
           <li><a href="#proyectos">Proyectos</a></li>
+          <li><a href="#estudio">Servicios</a></li>
           <li><a href="#filosofia">Filosof&iacute;a</a></li>
           <li><a href="#estudio">Estudio</a></li>
           <li><a href="#contacto">Contacto</a></li>
@@ -39,6 +40,7 @@
       <div class="mobile-menu" id="mobile-menu" aria-hidden="true">
         <button class="menu-close" type="button" aria-label="Close menu">&times;</button>
         <a href="#proyectos">Proyectos</a>
+        <a href="#estudio">Servicios</a>
         <a href="#filosofia">Filosof&iacute;a</a>
         <a href="#estudio">Estudio</a>
         <a href="#contacto">Contacto</a>
@@ -71,6 +73,7 @@
           </p>
         </div>
       </section>
+
 
       <section class="projects section" id="proyectos">
         <p class="section-label projects-label reveal" data-reveal>PROYECTOS</p>
@@ -131,18 +134,160 @@
       </section>
 
       <section class="about section" id="estudio">
-        <div class="about-top">
-          <div class="about-left reveal" data-reveal-group>
-            <p class="section-label" data-reveal>ESTUDIO</p>
-            <h2 data-reveal>Un taller de momentos y lugares.</h2>
+        <div class="about-intro reveal" data-reveal-group>
+          <p class="section-label" data-reveal>ESTUDIO</p>
+          <h2 class="about-intro-title" data-reveal>Un taller de momentos y lugares.</h2>
+          <p class="about-intro-text" data-reveal>
+            Somos un equipo que construye desde la convicci&oacute;n de que la arquitectura debe
+            mejorar la vida de las personas. Trabajamos en proyectos residenciales y corporativos en
+            Medell&iacute;n y Colombia, guiados por el minimalismo, la honestidad de los materiales y
+            el respeto por el lugar.
+          </p>
+        </div>
+        <div class="services-accordion reveal" data-reveal>
+          <div class="service-item">
+            <button
+              class="service-trigger"
+              id="service-trigger-01"
+              type="button"
+              aria-expanded="false"
+              aria-controls="service-panel-01"
+            >
+              <span class="service-index">01</span>
+              <span class="service-title">Dise&ntilde;o Arquitect&oacute;nico</span>
+              <span class="service-icon" aria-hidden="true"></span>
+            </button>
+            <div
+              class="service-panel"
+              id="service-panel-01"
+              role="region"
+              aria-labelledby="service-trigger-01"
+              aria-hidden="true"
+            >
+              <div class="service-panel-inner">
+                <p>
+                  Dise&ntilde;amos espacios residenciales, comerciales e institucionales seg&uacute;n
+                  el contexto, el uso y el presupuesto. Cada proyecto nace de una lectura clara del
+                  lugar y de quien lo habita.
+                </p>
+              </div>
+            </div>
           </div>
-          <div class="about-right reveal" data-reveal>
-            <p>
-              Somos un equipo que construye desde la convicci&oacute;n de que la arquitectura debe
-              mejorar la vida de las personas. Trabajamos en proyectos residenciales y corporativos
-              en Medell&iacute;n y Colombia, guiados por el minimalismo, la honestidad de los
-              materiales y el respeto por el lugar.
-            </p>
+
+          <div class="service-item">
+            <button
+              class="service-trigger"
+              id="service-trigger-02"
+              type="button"
+              aria-expanded="false"
+              aria-controls="service-panel-02"
+            >
+              <span class="service-index">02</span>
+              <span class="service-title">Construcci&oacute;n de Obras</span>
+              <span class="service-icon" aria-hidden="true"></span>
+            </button>
+            <div
+              class="service-panel"
+              id="service-panel-02"
+              role="region"
+              aria-labelledby="service-trigger-02"
+              aria-hidden="true"
+            >
+              <div class="service-panel-inner">
+                <p>
+                  Ejecutamos obras completas con coordinaci&oacute;n t&eacute;cnica y control de
+                  calidad en cada etapa. Acompa&ntilde;amos el proceso desde la planeaci&oacute;n
+                  hasta la entrega final.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="service-item">
+            <button
+              class="service-trigger"
+              id="service-trigger-03"
+              type="button"
+              aria-expanded="false"
+              aria-controls="service-panel-03"
+            >
+              <span class="service-index">03</span>
+              <span class="service-title">Remodelaciones y Adecuaciones</span>
+              <span class="service-icon" aria-hidden="true"></span>
+            </button>
+            <div
+              class="service-panel"
+              id="service-panel-03"
+              role="region"
+              aria-labelledby="service-trigger-03"
+              aria-hidden="true"
+            >
+              <div class="service-panel-inner">
+                <p>
+                  Renovamos espacios existentes para mejorar funcionalidad, imagen y desempe&ntilde;o
+                  t&eacute;cnico. Intervenimos con criterio para aprovechar lo que ya funciona y
+                  corregir lo que limita.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="service-item">
+            <button
+              class="service-trigger"
+              id="service-trigger-04"
+              type="button"
+              aria-expanded="false"
+              aria-controls="service-panel-04"
+            >
+              <span class="service-index">04</span>
+              <span class="service-title">Mantenimiento</span>
+              <span class="service-icon" aria-hidden="true"></span>
+            </button>
+            <div
+              class="service-panel"
+              id="service-panel-04"
+              role="region"
+              aria-labelledby="service-trigger-04"
+              aria-hidden="true"
+            >
+              <div class="service-panel-inner">
+                <p>
+                  Realizamos mantenimiento preventivo y correctivo en pintura, cubiertas, redes
+                  el&eacute;ctricas e hidrosanitarias. El objetivo es conservar los espacios
+                  operativos y en buen estado.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="service-item">
+            <button
+              class="service-trigger"
+              id="service-trigger-05"
+              type="button"
+              aria-expanded="false"
+              aria-controls="service-panel-05"
+            >
+              <span class="service-index">05</span>
+              <span class="service-title">Asesor&iacute;a Arquitect&oacute;nica</span>
+              <span class="service-icon" aria-hidden="true"></span>
+            </button>
+            <div
+              class="service-panel"
+              id="service-panel-05"
+              role="region"
+              aria-labelledby="service-trigger-05"
+              aria-hidden="true"
+            >
+              <div class="service-panel-inner">
+                <p>
+                  Brindamos acompa&ntilde;amiento profesional para tomar mejores decisiones en
+                  dise&ntilde;o, costos, planeaci&oacute;n y ejecuci&oacute;n. Estamos presentes
+                  cuando se necesita criterio t&eacute;cnico y visi&oacute;n pr&aacute;ctica.
+                </p>
+              </div>
+            </div>
           </div>
         </div>
         <div class="about-strip">

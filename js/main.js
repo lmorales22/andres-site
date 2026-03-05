@@ -455,5 +455,69 @@ cards.forEach((item) => {
   item.addEventListener('touchstart', primeGallery, { passive: true });
 });
 
+const initServicesAccordion = () => {
+  const accordion = document.querySelector('.services-accordion');
+  if (!accordion) return;
+
+  const items = Array.from(accordion.querySelectorAll('.service-item'));
+  if (!items.length) return;
+
+  const closeItem = (item) => {
+    const trigger = item.querySelector('.service-trigger');
+    const panel = item.querySelector('.service-panel');
+    if (!trigger || !panel) return;
+
+    item.classList.remove('is-open');
+    trigger.setAttribute('aria-expanded', 'false');
+    panel.setAttribute('aria-hidden', 'true');
+    panel.style.maxHeight = '0px';
+    panel.style.opacity = '0';
+  };
+
+  const openItem = (item) => {
+    const trigger = item.querySelector('.service-trigger');
+    const panel = item.querySelector('.service-panel');
+    if (!trigger || !panel) return;
+
+    item.classList.add('is-open');
+    trigger.setAttribute('aria-expanded', 'true');
+    panel.setAttribute('aria-hidden', 'false');
+    panel.style.maxHeight = `${panel.scrollHeight}px`;
+    panel.style.opacity = '1';
+  };
+
+  items.forEach((item) => {
+    closeItem(item);
+
+    const trigger = item.querySelector('.service-trigger');
+    if (!trigger) return;
+
+    trigger.addEventListener('click', () => {
+      const isOpen = item.classList.contains('is-open');
+
+      items.forEach((otherItem) => {
+        if (otherItem !== item) closeItem(otherItem);
+      });
+
+      if (isOpen) {
+        closeItem(item);
+      } else {
+        openItem(item);
+      }
+    });
+  });
+
+  openItem(items[0]);
+
+  window.addEventListener('resize', () => {
+    const openPanelItem = accordion.querySelector('.service-item.is-open');
+    if (!openPanelItem) return;
+    const openPanel = openPanelItem.querySelector('.service-panel');
+    if (!openPanel) return;
+    openPanel.style.maxHeight = `${openPanel.scrollHeight}px`;
+  });
+};
+
+initServicesAccordion();
 onScroll();
 setProjectParallax();
